@@ -105,7 +105,7 @@ const Filter = () =>{
       </div>
       <div className="nav-links pull-right">
         <div data-toggle='modal' data-target="#newTicketModal" className='btn bg-secondry-bv text-light'><strong>New Issue</strong></div>
-        <Link to='/faq' className='btn bg-secondry-bv text-light'><strong>FAQs</strong></Link>
+				{/* <Link to='/faq' className='btn bg-secondry-bv text-light'><strong>FAQs</strong></Link> */}
       </div>
       <div className='padding'></div>
     </div>
