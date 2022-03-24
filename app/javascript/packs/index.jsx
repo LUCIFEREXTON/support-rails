@@ -13,8 +13,9 @@ import { createStore } from 'redux';
 import reducer from '../App_Essentials/reducer';
 import axios from 'axios';
 import { composeWithDevTools } from "redux-devtools-extension";
-axios.defaults.baseURL = "https://utkarsh-help.freshdesk.com/api/v2";
-axios.defaults.headers.common['Authorization'] = "Basic VmRtUmM2dnVJSEpRUWlEa1pkN1g6WA=="
+const token = document.querySelector('[name=csrf-token]').content;
+axios.defaults.baseURL = "http://localhost:3000/api/v1";
+axios.defaults.headers.common['X-CSRF-TOKEN'] = token
 const store = createStore(reducer, composeWithDevTools());
 
 document.addEventListener('DOMContentLoaded', () => {

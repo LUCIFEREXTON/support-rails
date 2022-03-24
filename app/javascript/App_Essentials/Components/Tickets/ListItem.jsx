@@ -23,15 +23,16 @@ const ListItem = ({id, status, subject, createdAt, updatedAt}) => {
     (
       async () => {
         try {
-          const res = await axios.get(`/tickets/${id}`)
-          dispatch({type:'SAVE_TICKET', ticket: {...res.data}})
+					const res = await axios.get(`/ticket/read/${id}`)
+					const { conversationList, ...ticket} = res.data
+					dispatch({type:'SAVE_TICKET', ticket: {...ticket}})
+					dispatch({type:'UPDATE_CONVERSATIONS', conversationList: [...conversationList]})
         } catch (error) {
           console.log(error)
         }
       }
-    )()
-    fetchConversation();
-  }
+		)()
+	}
 
   return(
     <li className='list-group-item' data-toggle="modal" data-target="#viewTicketModal" onClick={handleClick}>

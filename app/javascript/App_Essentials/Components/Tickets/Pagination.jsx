@@ -10,7 +10,7 @@ const Pagination = ()=>{
   const next = async()=>{
     if( allfetched ) return
     try{
-      const { data } = await axios.get(`/tickets?order_by=updated_at&email=contact10@freshdesk.com&per_page=${ticket_per_page}&page=${page+1}`)
+      const { data } = await axios.get(`/ticket/index/${ticket_per_page}/${page+1}`)
       dispatch({type: 'UPDATE_PAGE_NUMBER', page: page+1})
       dispatch({type:'UPDATE_TICKETS', tickets: [...data]})
       if(data.length<ticket_per_page){
@@ -23,7 +23,7 @@ const Pagination = ()=>{
   const prev = async()=>{
     if( page===1 ) return
     try{
-      const { data } = await axios.get(`/tickets?order_by=updated_at&email=contact10@freshdesk.com&per_page=${ticket_per_page}&page=${page-1}`)
+				const { data } = await axios.get(`/ticket/index/${ticket_per_page}/${page-1}`)
       dispatch({type: 'UPDATE_PAGE_NUMBER', page: page-1})
       dispatch({type:'UPDATE_TICKETS', tickets: [...data]})
       if(allfetched){
@@ -38,7 +38,7 @@ const Pagination = ()=>{
   useEffect(() => {
     (async()=>{
       try{
-        const { data } = await axios.get(`/tickets?order_by=updated_at&email=contact10@freshdesk.com&per_page=${ticket_per_page}&page=${page}`)
+        const { data } = await axios.get(`/ticket/index/${ticket_per_page}/${page}`)
         dispatch({type:'UPDATE_TICKETS', tickets: [...data]})
         if(data.length<ticket_per_page){
           dispatch({type: 'ALL_FETCHED', status: true})

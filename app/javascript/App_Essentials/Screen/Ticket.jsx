@@ -35,7 +35,7 @@ const Ticket = () => {
 
   const statusChangeHandler = async(status) => {
     try{
-      axios.put(`/tickets/${id}`, { status })
+			axios.put(`/ticket/update/${id}`, { status })
       .then(res => {
         setticket({...res.data})
         dispatch({type:'UPDATE_STATUS', ticket: {...res.data}})
@@ -50,11 +50,10 @@ const Ticket = () => {
     if(editorState.getCurrentContent().getPlainText()!==''){
       let formData = new FormData();
       formData.append( "body", draftToHtml(convertToRaw(editorState.getCurrentContent())));
-      formData.append("private", false);
-      formData.append("notify_emails[]", "ajaykanyal11@gmail.com");
+      formData.append("agent_id", ticket.responder_id);
       formData.append("user_id", ticket.requester_id);
       files.forEach(file => formData.append("attachments[]",file));
-      axios.post(`/tickets/${id}/notes`, formData, {
+			axios.post(`/ticket/reply/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
