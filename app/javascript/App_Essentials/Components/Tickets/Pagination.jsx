@@ -44,7 +44,7 @@ const Pagination = ()=>{
           dispatch({type: 'ALL_FETCHED', status: true})
         }
       }catch(e){
-        console.log(e)
+        console.log(e.response.data.message)
       }
     })()
   },[])
