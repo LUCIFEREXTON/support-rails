@@ -1,0 +1,11 @@
+development:
+  REACT_APP_FRESHDESK_BASE_URL: "https://utkarsh-help.freshdesk.com/api/v2"
+  REACT_APP_FRESHDESK_API_KEY: "Basic VmRtUmM2dnVJSEpRUWlEa1pkN1g6WA=="
+
+production:
+  REACT_APP_FRESHDESK_BASE_URL: "https://utkarsh-help.freshdesk.com/api/v2"
+  REACT_APP_FRESHDESK_API_KEY: "Basic VmRtUmM2dnVJSEpRUWlEa1pkN1g6WA=="
+
+test:
+  REACT_APP_FRESHDESK_BASE_URL: "https://utkarsh-help.freshdesk.com/api/v2"
+  REACT_APP_FRESHDESK_API_KEY: "Basic VmRtUmM2dnVJSEpRUWlEa1pkN1g6WA=="
