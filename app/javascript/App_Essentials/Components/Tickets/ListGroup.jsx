@@ -10,6 +10,7 @@ const ListGroup = ()=>{
         <ListItem 
           key={ticket.id} 
           id={ticket.id} 
+					user_id={ticket.requester_id}
           subject={ticket.subject} 
           status={ticket.status} 
           createdAt={ticket.created_at} 

@@ -3,7 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import { useSelector, useDispatch } from "react-redux";
 
-const ListItem = ({id, status, subject, createdAt, updatedAt}) => {
+const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
   const dispatch = useDispatch()
   let statusValue = ''
   if( status === 5 ){
@@ -23,7 +23,7 @@ const ListItem = ({id, status, subject, createdAt, updatedAt}) => {
     (
       async () => {
         try {
-					const res = await axios.get(`/ticket/read/${id}`)
+					const res = await axios.post(`/ticket/read`,{ user_id, id})
 					const { conversationList, ...ticket} = res.data
 					dispatch({type:'SAVE_TICKET', ticket: {...ticket}})
 					dispatch({type:'UPDATE_CONVERSATIONS', conversationList: [...conversationList]})

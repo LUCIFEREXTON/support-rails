@@ -1,19 +1,15 @@
 require 'httparty'
 require 'json'
 class Api::V1::TicketController < ApplicationController
-	class CustomError < StandardError
-		def initialise(msg)
-			super(msg)
-		end
-	end
-
+	
 	protect_from_forgery
 	include HTTParty
   before_action :load_user_defaults
 	before_action :httparty_default_setting
 	before_action :request_puts
 	rescue_from StandardError, :with => :catch_error
-	rescue_from CustomError, :with => :catch_custom_error
+	rescue_from BlogVault::Error, :with => :catch_custom_error
+
 	def index
 		verify_fields(params, [:page_no, :per_page]) 
 		res = self.class.get("/tickets?order_by=updated_at&email=#{@@email}&per_page=#{params[:per_page]}&page=#{params[:page_no]}")
@@ -22,16 +18,21 @@ class Api::V1::TicketController < ApplicationController
   end
 
   def read
-		verify_fields(params, [:id])
+		verify_fields(params, [:id, :user_id])
+
 		ticket_res = self.class.get("/tickets/#{params[:id]}")
 		validate_response(ticket_res)
+		ticket_res = JSON.parse(ticket_res.body)
+		
+		raise BlogVault::Error.new('Ticket Not Exist') if(ticket_res[:user_id] == params[:user_id])
+		
 		conversation_res = self.class.get("/tickets/#{params[:id]}/conversations")
 		validate_response(conversation_res)
-		ticket_res = JSON.parse(ticket_res.body)
 		conversation_res = JSON.parse(conversation_res.body)
+		
 		conversation_res = conversation_res.select{|conversation| conversation['private'] == false}
 		ticket_res["conversationList"] = conversation_res
-		render json: ticket_res, status: res.code
+		render json: ticket_res, status: 200
   end
 
   def create
@@ -70,7 +71,6 @@ class Api::V1::TicketController < ApplicationController
 		end
 		res = self.class.post("/tickets/#{params[:id]}/notes",{
 			:body => body,
-		puts obj
 			:headers => {"Content-Type" => 'multipart/form-data'} })
 		validate_response(res)
 		render json: res.body, status: res.code
@@ -115,21 +115,23 @@ class Api::V1::TicketController < ApplicationController
 	def verify_fields(obj, args)
 		puts 'Required Args: ',args
 		args.each do |label|
-		 raise CustomError.new('You have not send all required fields')	unless obj.has_key?(label)
+		 raise BlogVault::Error.new('You have not send all required fields')	unless obj.has_key?(label)
 		end
 	end
 
 	def validate_response(resp)
 		if resp.code != 200 && resp.code != 201 
-			raise CustomError.new("Server Issue, Please Try Again...") 
+			raise BlogVault::Error.new("Server Issue, Please Try Again...") 
 		end
 	end
 
 	def catch_error(error)
+		puts error
 		render json: { message: error }, status: 400
 	end
 
 	def catch_custom_error(error)
+		puts error
 		render json: { message: error }, status: 400
 	end
 
