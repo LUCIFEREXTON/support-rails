@@ -94,12 +94,13 @@ class Api::V1::TicketController < ApplicationController
 	private
 	
 	def httparty_default_setting
+		api = "Basic #{Base64.strict_encode64("#{FRESHDESK_CONF["REACT_APP_FRESHDESK_API_KEY"]}:X")}"
 		self.class.base_uri FRESHDESK_CONF["REACT_APP_FRESHDESK_BASE_URL"]
-		self.class.headers :Authorization => FRESHDESK_CONF["REACT_APP_FRESHDESK_API_KEY"]
+		self.class.headers :Authorization => api
 	end
 
 	def load_user_defaults
-		@@email = 'contact10@freshdesk.com' 
+		@@email = 'something@enmail.com' 
 	end
 
 	def required_field(obj, labels_list)
@@ -121,6 +122,7 @@ class Api::V1::TicketController < ApplicationController
 
 	def validate_response(resp)
 		if resp.code != 200 && resp.code != 201 
+			p resp
 			raise BlogVault::Error.new("Server Issue, Please Try Again...") 
 		end
 	end

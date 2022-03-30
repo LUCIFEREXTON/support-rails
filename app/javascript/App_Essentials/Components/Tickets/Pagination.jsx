@@ -16,8 +16,8 @@ const Pagination = ()=>{
       if(data.length<ticket_per_page){
         dispatch({type: 'ALL_FETCHED', status: true})
       }
-    }catch(e){
-      console.log(e)
+    }catch(error){
+      dispatch({type:'ERROR', error: error.response.data.message})
     }
   }
   const prev = async()=>{
@@ -30,8 +30,8 @@ const Pagination = ()=>{
         dispatch({type: 'ALL_FETCHED', status: false})
       }
       console.log(data)
-    }catch(e){
-      console.log(e)
+    }catch(error){
+      dispatch({type:'ERROR', error: error.response.data.message})
     }
   }
 
@@ -43,8 +43,8 @@ const Pagination = ()=>{
         if(data.length<ticket_per_page){
           dispatch({type: 'ALL_FETCHED', status: true})
         }
-      }catch(e){
-        console.log(e.response.data.message)
+      }catch(error){
+        dispatch({type:'ERROR', error: error.response.data.message})
       }
     })()
   },[])

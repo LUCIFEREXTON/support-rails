@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from 'react'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import ConversationGroup from "../Components/Tickets/ConversationGroup";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -40,9 +40,11 @@ const Ticket = () => {
         setticket({...res.data})
         dispatch({type:'UPDATE_STATUS', ticket: {...res.data}})
       })
-      .catch(error => console.log(error))
-    }catch(e){
-      console.log(e)
+      .catch(error=>{
+        dispatch({type:'ERROR', error: error.response.data.message})
+      })
+    }catch(error){
+      dispatch({type:'ERROR', error: error.response.data.message})
     }
   }
 
@@ -65,7 +67,9 @@ const Ticket = () => {
         changeFiles([])
         formRef.current.reset()
       })
-      .catch(error => console.log(error));
+      .catch(error=>{
+        dispatch({type:'ERROR', error: error.response.data.message})
+      })
     }
   }
 

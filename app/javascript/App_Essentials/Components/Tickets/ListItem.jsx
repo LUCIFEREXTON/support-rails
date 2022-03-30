@@ -1,7 +1,7 @@
 import { formatDate } from '../../helperFunction.js'
 import React from 'react'
 import axios from 'axios'
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
 					dispatch({type:'SAVE_TICKET', ticket: {...ticket}})
 					dispatch({type:'UPDATE_CONVERSATIONS', conversationList: [...conversationList]})
         } catch (error) {
-          console.log(error)
+          dispatch({type:'ERROR', error: error.response.data.message})
         }
       }
 		)()

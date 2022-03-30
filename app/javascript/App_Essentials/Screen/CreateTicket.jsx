@@ -58,7 +58,9 @@ const CreateTicket = () =>{
         dispatch({type:'CREATE_TICKET', ticket: res.data})
 				initialValue();
       })
-      .catch(error => console.log(error));
+      .catch(error=>{
+        dispatch({type:'ERROR', error: error.response.data.message})
+      })
 
 		}
 	}
@@ -94,9 +96,9 @@ const CreateTicket = () =>{
 				const res = await axios.get('/ticket/blog_uri_list')
 				seturilist([...res.data.blog_uri_list])
 				changefilteredURIList([...res.data.blog_uri_list].slice(0,Math.min(res.data.blog_uri_list.length,5)))
-			}catch(e){
-				console.log(e)
-			}
+			}catch(error){
+        dispatch({type:'ERROR', error: error.response.data.message})
+      }
 		})()
 	},[])
 

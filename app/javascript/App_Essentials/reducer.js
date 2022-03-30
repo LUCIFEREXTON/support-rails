@@ -10,20 +10,28 @@ const initialState = {
 	closetickets: 0,
 	selectedTicketId: null,
   conversationList: [],
+  ticketPage: 1,
+  currentFilter: '2',
+  allfetched:false,
+  ticket_per_page: 14,
+  ticket: {},
+  errormsg: '',
   folderList: [],
   articles: [],
   filterArticles: [],
-  article: {},
-  ticketPage: 1,
-  allfetched:false,
-  ticket_per_page: 14,
-  ticket: {}
+  article: {}
 }
 
 const ticket_open_status = [2, 3, 4]
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'ERROR':{
+      return {
+        ...state,
+        errormsg: action.error
+      }
+    }
     case 'UPDATE_PAGE_NUMBER':{
       return {
         ...state,
@@ -67,7 +75,7 @@ const reducer = (state = initialState, action) => {
       }
     }
     case 'UPDATE_STATUS':{
-      if( action.ticket.status === 5){
+      if( action.ticket.status === 5 && state.currentFilter != '2'){
         return {
           ...state,
           ticket: {...action.ticket},
@@ -86,7 +94,8 @@ const reducer = (state = initialState, action) => {
     case 'CHANGE_FILTER_LIST':{
       return {
         ...state,
-        filterList: action.filterList
+        filterList: action.filterList,
+        currentFilter: action.currentFilter
       }
     }
     case 'SHOW_TICKET':{

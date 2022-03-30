@@ -60,7 +60,8 @@ const Filter = () =>{
 	useEffect(() => {
     dispatch({
       type:'CHANGE_FILTER_LIST', 
-      filterList: filteredtickets
+      filterList: filteredtickets,
+      currentFilter: filterStatus
     })
   }, [filteredtickets])
 
