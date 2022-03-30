@@ -88,7 +88,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         tickets: [action.ticket, ...state.tickets.filter(ticket => ticket.id !== action.ticket.id)],
         filterList: [action.ticket, ...state.filterList.filter(ticket => ticket.id !== action.ticket.id)],
-        opentickets: state.opentickets + 1
+        opentickets: action.ticket.status === 5 ? state.opentickets - 1 : state.opentickets + 1
       }
     }
     case 'CHANGE_FILTER_LIST':{
