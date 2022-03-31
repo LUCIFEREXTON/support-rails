@@ -5,11 +5,7 @@ import Pagination from './Pagination';
 const AllTickets = () =>{
   return(
     <>
-			<div className='row'>				
-      <div className='col-md-12'>
-        <ListGroup />				
-      </div>				
-      </div>
+			<ListGroup />				
       <Pagination/>
     </>
   );

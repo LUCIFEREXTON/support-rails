@@ -6,17 +6,11 @@ const Layout = ({children}) =>{
   return(
 		<div className='container'>
 			{msg!='' && <Toast msg={msg}/>}
-			<section className='content'>
-				<div className='row'>
-					<div className='col-md-12'>
-						<div className='grid support-content bg-primary-bv'>
-							<div className='grid-body'>
-								{children}
-							</div>
-						</div>
-					</div>
+			<div className='grid support-content bg-primary-bv'>
+				<div className='grid-body'>
+					{children}
 				</div>
-			</section>
+			</div>
 		</div>
   );
 }
