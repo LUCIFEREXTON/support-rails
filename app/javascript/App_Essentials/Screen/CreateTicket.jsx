@@ -103,9 +103,11 @@ const CreateTicket = () =>{
 	},[])
 
   return(
-    <div onClick={(event) => {
-      if(containerRef.current && !containerRef.current.contains(event.target)) { 
-      setDropdown(false);
+    <div
+      className="modal-dialog modal-dialog-centered"
+      onClick={(event) => {
+        if(containerRef.current && !containerRef.current.contains(event.target)) { 
+        setDropdown(false);
       }
     }}>
       <div className='modal-header bg-primary-bv text-light pos-rel new-ticket-header'>

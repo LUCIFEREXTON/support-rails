@@ -87,7 +87,7 @@ const Ticket = () => {
   }, [reduxticket])
 
   return(
-    <>
+    <div className="modal-dialog modal-dialog-centered">
       <div className="modal-header bg-primary-bv text-light">
         <div className="ticket-header">
         <h4 className="modal-title"><i className="fa fa-cog"></i> {ticket?.subject} [#{ticket?.id}] {statusValue}</h4>
@@ -156,7 +156,7 @@ const Ticket = () => {
           </form>
           <button type="submit" className="btn btn-primary text-left btn-reply" onClick={onReplySubmit}>Reply</button>
       </div>}
-    </>
+    </div>
   );
 }
 
