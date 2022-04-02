@@ -12,16 +12,39 @@ import Modal from '../Components/Modal'
 
 const MainPage = () =>{
 	return(
-		<Layout>
-			<Filter />
-			<AllTickets/>
-			<Modal id='newTicketModal'>
-				<CreateTicket/>
-			</Modal>						
-			<Modal id='viewTicketModal'>
-				<Ticket/>
-			</Modal>						
-		</Layout>
+		// <Layout>
+		// 	<Filter />
+		// 	<AllTickets/>
+		// 	<Modal id='newTicketModal'>
+		// 		<CreateTicket/>
+		// 	</Modal>						
+		// 	<Modal id='viewTicketModal'>
+		// 		<Ticket/>
+		// 	</Modal>						
+		// </Layout>
+		<Routes>
+			<Route 
+				path="/"
+				element={
+					<Layout>
+						<Filter />
+						<AllTickets />
+					</Layout>
+				}
+			/>
+			<Route
+				path="/new"
+				element={
+					<CreateTicket />
+				}
+			/>
+			<Route
+				path="/view"
+				element={
+					<Ticket />
+				}
+			/>
+		</Routes>
 		// <Routes>
 		// 	<Route path="/faq/*" element={<Faq/>} />
 		// 	<Route 
