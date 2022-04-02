@@ -77,7 +77,7 @@ const Filter = () =>{
         <button 
             type='button' 
             data-status='1' 
-            className={`btn btn-default${filterStatus==='1'?' active':''}`} 
+            className={`btn btn-success border-end border-2${filterStatus==='1'?' active':''}`} 
             onClick={changefilter}
         >
           {parseInt(opentickets)} Opened
@@ -86,25 +86,25 @@ const Filter = () =>{
         <button 
           type='button' 
           data-status='2' 
-          className={`btn btn-default${filterStatus==='2'?' active':''}`} 
+          className={`btn btn-success border-start${filterStatus==='2'?' active':''}`} 
           onClick={changefilter}
         >
           {parseInt(total)} All
         </button>
       </div>
-      <div className='btn-group'>
-        <button type='button' className='btn btn-default dropdown-toggle' onClick={toggleDropdown}>
+      <div className='btn-group dropdown mx-1'>
+        <button type='button' className='btn btn-light dropdown-toggle' onClick={toggleDropdown}>
           Sort: <strong>{selectedtype}</strong> <span className='caret'></span>
         </button>
         {
         dropdown && 
-        <ul className='dropdown-menu fa-padding' role='menu'>
-          <li data-type='Newest' className='filter-item' onClick={sorting}><i className={`fa${selectedtype === 'Newest'?' fa-check':''}`}></i> Newest</li>
-          <li data-type='Recently updated' className='filter-item' onClick={sorting}><i className={`fa${selectedtype === 'Recently updated'?' fa-check':''}`}> </i> Recently updated</li>
+        <ul className='dropdown-menu w-100 top-100 fa-padding' role='menu'>
+          <li data-type='Newest' className='dropdown-item' onClick={sorting}><i className={`fa${selectedtype === 'Newest'?' fa-check':''}`}></i> Newest</li>
+          <li data-type='Recently updated' className='dropdown-item' onClick={sorting}><i className={`fa${selectedtype === 'Recently updated'?' fa-check':''}`}> </i> Recently updated</li>
         </ul>
         }
       </div>
-      <div className="nav-links pull-right">
+      <div className="nav-links float-end">
         <div data-toggle='modal' data-target="#newTicketModal" className='btn bg-secondry-bv text-light'><strong>New Issue</strong></div>
 				{/* <Link to='/faq' className='btn bg-secondry-bv text-light'><strong>FAQs</strong></Link> */}
       </div>

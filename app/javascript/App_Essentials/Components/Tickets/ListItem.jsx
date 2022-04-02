@@ -7,10 +7,9 @@ const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
   const dispatch = useDispatch()
   let statusValue = ''
   if( status === 5 ){
-    statusValue =  <span className='label label-danger pull-right'>Closed</span>
+    statusValue =  <span class="badge bg-danger float-end">Success</span>
   }else{
-    statusValue =  <span className='label label-success pull-right'>Open</span> 
-  }
+    statusValue =  <span class="badge bg-success float-end">Success</span> }
   
   const fetchConversation = () => {
     axios.get(`/tickets/${id}/conversations`)

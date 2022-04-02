@@ -7,6 +7,11 @@ import ReactDOM from 'react-dom'
 import '../App_Essentials/index.css';
 import App from '../App_Essentials/App';
 import reportWebVitals from '../App_Essentials/reportWebVitals';
+//bootstrap
+import '../App_Essentials/custom_bootstrap.scss'
+import $ from 'jquery';
+import Popper from 'popper.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 //redux
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
