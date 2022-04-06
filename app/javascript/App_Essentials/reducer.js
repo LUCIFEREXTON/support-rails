@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) => {
     case 'ERROR':{
       return {
         ...state,
-        errormsg: action.error
+				errormsg: action.error || 'Can\'t Connect to Server' 
       }
     }
     case 'UPDATE_PAGE_NUMBER':{

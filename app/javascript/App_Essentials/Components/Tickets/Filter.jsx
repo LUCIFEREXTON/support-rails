@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 
 const Filter = () =>{
@@ -10,7 +10,7 @@ const Filter = () =>{
   const [selectedtype, setselectedtype] = useState('Recently updated')
   const [dropdown, setdropdown] = useState(false)
   const dispatch = useDispatch()
-  
+  const { pathname }= useLocation()
   const toggleDropdown = () => setdropdown(!dropdown)
 
   const { tickets, filtered, opentickets, total } = useSelector( state => {
@@ -73,7 +73,7 @@ const Filter = () =>{
     <div className="tkt-header bg-primary-bv">
       <h2><strong>Issues</strong></h2>   
       <hr/>
-      <div className='btn-group'>
+      <div className='btn-group align-items-center'>
         <button 
             type='button' 
             data-status='1' 
@@ -94,7 +94,7 @@ const Filter = () =>{
       </div>
       <div className='btn-group dropdown mx-1'>
         <button type='button' className='btn btn-light dropdown-toggle' onClick={toggleDropdown}>
-          Sort: <strong>{selectedtype}</strong> <span className='caret'></span>
+          Sort: <strong>{selectedtype}</strong> 
         </button>
         {
         dropdown && 
@@ -105,7 +105,7 @@ const Filter = () =>{
         }
       </div>
       <div className="nav-links float-end">
-        <Link to="/new"  className='btn bg-secondry-bv text-light'><strong>New Issue</strong></Link>
+        <Link to='new'  className='btn bg-secondry-bv text-light'><strong>New Issue</strong></Link>
 				{/* <Link to='/faq' className='btn bg-secondry-bv text-light'><strong>FAQs</strong></Link> */}
       </div>
       <div className='padding'></div>

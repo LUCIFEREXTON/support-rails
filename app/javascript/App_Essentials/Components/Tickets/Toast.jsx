@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+
 export default function Toast({msg}) {
     const dispatch = useDispatch()
     const [openmodal, setopenmodal] = useState(true)
@@ -8,8 +9,8 @@ export default function Toast({msg}) {
         e.stopPropagation()
         setopenmodal(false)
     }
-    const reload = ()=>{
-        window.location.reload(false);
+	const reload = ()=>{
+			window.location.reload(false);
     }
 	return(
         openmodal?

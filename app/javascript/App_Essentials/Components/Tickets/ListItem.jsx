@@ -2,11 +2,12 @@ import { formatDate } from '../../helperFunction.js'
 import React from 'react'
 import axios from 'axios'
 import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const pathname = useLocation().pathname
   let statusValue = ''
   if( status === 5 ){
     statusValue =  <span class="badge bg-danger float-end">Success</span>
@@ -28,7 +29,7 @@ const ListItem = ({id, user_id, status, subject, createdAt, updatedAt}) => {
 					const { conversationList, ...ticket} = res.data
 					dispatch({type:'SAVE_TICKET', ticket: {...ticket}})
 					dispatch({type:'UPDATE_CONVERSATIONS', conversationList: [...conversationList]})
-          navigate('/view')
+          navigate('view')
         } catch (error) {
           dispatch({type:'ERROR', error: error.response.data.message})
         }

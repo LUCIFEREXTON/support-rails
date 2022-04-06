@@ -3,7 +3,7 @@ import './style.css';
 import Layout from '../Components/Tickets/Layout';
 import AllTickets from '../Components/Tickets/AllTickets';
 import Filter from '../Components/Tickets/Filter';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation  } from "react-router-dom";
 import CreateTicket from './CreateTicket';
 import Ticket from './Ticket';
 // import Faq from './Faq';
@@ -11,7 +11,7 @@ import Ticket from './Ticket';
 import Modal from '../Components/Modal'
 
 const MainPage = () =>{
-	return(
+		return(
 		// <Layout>
 		// 	<Filter />
 		// 	<AllTickets/>
@@ -23,8 +23,8 @@ const MainPage = () =>{
 		// 	</Modal>						
 		// </Layout>
 		<Routes>
-			<Route 
-				path="/"
+			<Route
+				path='/'
 				element={
 					<Layout>
 						<Filter />
@@ -33,13 +33,13 @@ const MainPage = () =>{
 				}
 			/>
 			<Route
-				path="/new"
+				path='/new'
 				element={
 					<CreateTicket />
 				}
 			/>
 			<Route
-				path="/view"
+				path='/view'
 				element={
 					<Ticket />
 				}

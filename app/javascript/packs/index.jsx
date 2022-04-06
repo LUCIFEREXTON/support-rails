@@ -23,7 +23,7 @@ axios.defaults.baseURL = "http://localhost:3000/api/v1";
 axios.defaults.headers.common['X-CSRF-TOKEN'] = token
 const store = createStore(reducer, composeWithDevTools());
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('turbolinks:load', () => {
   ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>

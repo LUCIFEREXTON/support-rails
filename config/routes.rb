@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 			get 'ticket/blog_uri_list' => 'ticket#blog_uri_list'
     end
   end
-  root 'homepage#index'
+  get '/tickets', to:'homepage#index'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
