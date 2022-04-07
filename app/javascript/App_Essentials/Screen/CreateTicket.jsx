@@ -10,7 +10,6 @@ import draftToHtml from 'draftjs-to-html';
 
 const CreateTicket = () =>{
   const [subject, changeSubject] = useState('');
-  // const [description, changeDescription] = useState('');
   const [files, changeFiles] = useState([]);
   const [blogURI, changeBlogURI] = useState([]);
   const [urilist, seturilist] = useState([])
@@ -20,7 +19,6 @@ const CreateTicket = () =>{
   const formRef = useRef();
   const fileUploadRef = useRef();
   const containerRef = useRef();
-  const email = useSelector(state => state.user.email);
   const inputURIRef = useRef();
 	const dispatch = useDispatch()
   const onSubjectChange = event => {
