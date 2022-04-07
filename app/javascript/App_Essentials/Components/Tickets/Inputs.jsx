@@ -2,23 +2,48 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import Dropdown from './Inputs/Dropdown'
 import DependableDropdown from './Inputs/DependableDropdown'
+<<<<<<< HEAD
 import Text from './Inputs/Text'
 import Date from './Inputs/Date'
 import Checkbox from './Inputs/Checkbox'
+=======
+import TextArea from './Inputs/TextArea'
+import Checkbox from './Inputs/Checkbox'
+import Text from './Inputs/Text'
+>>>>>>> a5cf65ba1bf4c7246d49ed31c12a13eb7e50965b
 const Inputs = ({})=>{
 	const [formData, setFormData] = useState(null)
 	const submitHandler = (e)=>{
 		e.preventDefault()
 	}
 	const [data, setdata] = useState([])
+	const renderElement = (field) => {
+		switch (field.type) {
+			case 'nested_dropdown':
+				return <DependableDropdown key={field.id} field={field} />
+			case 'select':
+				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.label}/>
+			case 'textarea':
+				return <TextArea key={field.id} name={field?.label} />
+			case 'checkbox':
+				return <Checkbox key={field.id} name={field?.label} />
+			default:
+				return <Text key={field.id} field={field} />
+		}
+	}
 	useEffect(()=>{
 		(async()=>{
+<<<<<<< HEAD
 			const res = await axios.get('https://test8653.freshdesk.com/api/v2/ticket_fields',
 				{"headers":{
 				"Authorization":'Basic MEZnazh0ZzlNSUhsb0RWMEtpYTE6WA=='
 			}}
 			)
 			setdata([...res.data])			
+=======
+			const res = await axios.get('/ticket/create')
+			setdata([...res.data])
+>>>>>>> a5cf65ba1bf4c7246d49ed31c12a13eb7e50965b
 		})()
 	},[])
 	
@@ -45,19 +70,24 @@ const Inputs = ({})=>{
 
 	return(
 		<div className='container'>
-			{formData && <form onSubmit={submitHandler}>				
-				<Checkbox field={data[1]} changeHandler={onChange} value={formData[data[1]?.name]}/>
-				<Text field={data[5]} changeHandler={onChange} value={formData[data[5]?.name]}/>
-				{/* <Date field={data[3]} changeHandler={onChange} value={formData[data[3]?.name]}/> */}
-				{/* {data?.length && <DependableDropdown field={data[2]} />} */}
-				{/* <Dropdown optionArray={data[8]?.choices} name={data[8]?.label}/> */}
+			<form onSubmit={submitHandler}>
+				{data.map(field => renderElement(field))}
 				<input type='submit' value='Submit'/>
-			</form>}
+			</form>
 		</div>
 	) 
 }
 
 export default Inputs
+
+// {data?.length && <DependableDropdown field={data[2]} />}
+// <Dropdown optionArray={data[6]?.choices} name={data[6]?.label}/>
+// <TextArea name={data[9]?.label} />
+// <Checkbox name={data[1]?.label} />
+// <Text field={data[3]} />
+// <Text field={data[4]} />
+// <Text field={data[5]} />
+// <Text field={data[8]} />
 
 // custom_text => text => 1
 // custom_paragraph => textarea => 2

@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function TextArea(props) {
+function TextArea({name}) {
 	return (
 		<div className="form-floating mb-3">
-			<textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{height: '100px'}}></textarea>
-			<label for="floatingTextarea2">Comments</label>
+			<textarea className="form-control" name={name} placeholder="Leave a comment here" id="floatingTextarea2" style={{height: '100px'}}></textarea>
+			<label for="floatingTextarea2">{name}</label>
 		</div>
 	)
 }

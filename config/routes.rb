@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'ticket/index/:per_page/:page_no' => 'ticket#index'
       post 'ticket/read' => 'ticket#read'
+      get 'ticket/create' => 'ticket#new'
       post 'ticket/create' => 'ticket#create'
       put 'ticket/update/:id' => 'ticket#update'
       post 'ticket/reply/:id' => 'ticket#reply'
