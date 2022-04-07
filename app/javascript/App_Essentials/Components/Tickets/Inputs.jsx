@@ -2,15 +2,9 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import Dropdown from './Inputs/Dropdown'
 import DependableDropdown from './Inputs/DependableDropdown'
-<<<<<<< HEAD
-import Text from './Inputs/Text'
-import Date from './Inputs/Date'
-import Checkbox from './Inputs/Checkbox'
-=======
 import TextArea from './Inputs/TextArea'
 import Checkbox from './Inputs/Checkbox'
 import Text from './Inputs/Text'
->>>>>>> a5cf65ba1bf4c7246d49ed31c12a13eb7e50965b
 const Inputs = ({})=>{
 	const [formData, setFormData] = useState(null)
 	const submitHandler = (e)=>{
@@ -33,17 +27,8 @@ const Inputs = ({})=>{
 	}
 	useEffect(()=>{
 		(async()=>{
-<<<<<<< HEAD
-			const res = await axios.get('https://test8653.freshdesk.com/api/v2/ticket_fields',
-				{"headers":{
-				"Authorization":'Basic MEZnazh0ZzlNSUhsb0RWMEtpYTE6WA=='
-			}}
-			)
-			setdata([...res.data])			
-=======
 			const res = await axios.get('/ticket/create')
 			setdata([...res.data])
->>>>>>> a5cf65ba1bf4c7246d49ed31c12a13eb7e50965b
 		})()
 	},[])
 	
