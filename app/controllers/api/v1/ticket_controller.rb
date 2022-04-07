@@ -17,6 +17,15 @@ class Api::V1::TicketController < ApplicationController
 		render json: res.body, status: res.code
   end
 
+  def init_settings
+    body = {
+      :per_page => 10,
+      :route => '/tickets'
+    }
+    render json: body, status: 200
+  end
+
+
   def read
 		verify_fields(params, [:id, :user_id])
 
@@ -59,6 +68,9 @@ class Api::V1::TicketController < ApplicationController
 
       when "default_status"
 	ticket_field["type"] = "select"
+	ticket_field["choices"] = ticket_field["choices"].each_with_object({}) do |(key, value), choice|
+	  choice[value.last] = key
+	end
 
       when "default_priority"
 	ticket_field["type"] = "select"
