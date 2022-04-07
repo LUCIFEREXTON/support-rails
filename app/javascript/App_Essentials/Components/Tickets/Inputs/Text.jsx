@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 function Text({field}) {
 	return (
 		<div className="form-floating mb-3">
-			<input type={field?.type} className="form-control" id={`${field?.id}`} placeholder="name@example.com"/>
-			<label for={`${field?.id}`}>Email address</label>
+			<input type={field?.type} className="form-control" id={`${field?.id}`} placeholder={`Enter ${field?.label}`} step={field?.step}/>
+			<label for={`${field?.id}`}>{field?.label}</label>
 		</div>
 	)
 }

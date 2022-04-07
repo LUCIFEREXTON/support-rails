@@ -2,19 +2,32 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import Dropdown from './Inputs/Dropdown'
 import DependableDropdown from './Inputs/DependableDropdown'
+import TextArea from './Inputs/TextArea'
+import Checkbox from './Inputs/Checkbox'
+import Text from './Inputs/Text'
 const Inputs = ({})=>{
 	const submitHandler = (e)=>{
 		console.log(e.value)
 		e.preventDefault()
 	}
 	const [data, setdata] = useState([])
+	const renderElement = (field) => {
+		switch (field.type) {
+			case 'nested_dropdown':
+				return <DependableDropdown key={field.id} field={field} />
+			case 'select':
+				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.label}/>
+			case 'textarea':
+				return <TextArea key={field.id} name={field?.label} />
+			case 'checkbox':
+				return <Checkbox key={field.id} name={field?.label} />
+			default:
+				return <Text key={field.id} field={field} />
+		}
+	}
 	useEffect(()=>{
 		(async()=>{
-			const res = await axios.get('https://test8653.freshdesk.com/api/v2/ticket_fields',
-				{"headers":{
-				"Authorization":'Basic MEZnazh0ZzlNSUhsb0RWMEtpYTE6WA=='
-			}}
-			)
+			const res = await axios.get('/ticket/create')
 			setdata([...res.data])
 		})()
 	},[])
@@ -22,8 +35,7 @@ const Inputs = ({})=>{
 	return(
 		<div className='container'>
 			<form onSubmit={submitHandler}>
-				{/* {data?.length && <DependableDropdown field={data[2]} />}
-				<Dropdown optionArray={data[8]?.choices} name={data[8]?.label}/> */}
+				{data.map(field => renderElement(field))}
 				<input type='submit' value='Submit'/>
 			</form>
 		</div>
@@ -31,6 +43,15 @@ const Inputs = ({})=>{
 }
 
 export default Inputs
+
+// {data?.length && <DependableDropdown field={data[2]} />}
+// <Dropdown optionArray={data[6]?.choices} name={data[6]?.label}/>
+// <TextArea name={data[9]?.label} />
+// <Checkbox name={data[1]?.label} />
+// <Text field={data[3]} />
+// <Text field={data[4]} />
+// <Text field={data[5]} />
+// <Text field={data[8]} />
 
 // custom_text => text => 1
 // custom_paragraph => textarea => 2

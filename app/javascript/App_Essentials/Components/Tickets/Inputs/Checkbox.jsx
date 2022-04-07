@@ -1,9 +1,16 @@
-				<div className="form-check mb-3">
-					<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-					<label className="form-check-label" for="flexCheckDefault">
-						Default checkbox
-					</label>
-				</div>
+import React from 'react'
+import PropTypes from 'prop-types'
+const Checkbox = ({name}) => {
+	return (
+<		div className="form-check mb-3">
+			<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+			<label className="form-check-label" for="flexCheckDefault">
+				{name}
+			</label>
+		</div>
+	)
+}
+export default Checkbox;
 //			{
 //					"id": 84000471175,
 //					"name": "cf_encrypted",
