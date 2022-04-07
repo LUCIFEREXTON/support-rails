@@ -2,9 +2,12 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import Dropdown from './Inputs/Dropdown'
 import DependableDropdown from './Inputs/DependableDropdown'
+import Text from './Inputs/Text'
+import Date from './Inputs/Date'
+import Checkbox from './Inputs/Checkbox'
 const Inputs = ({})=>{
+	const [formData, setFormData] = useState(null)
 	const submitHandler = (e)=>{
-		console.log(e.value)
 		e.preventDefault()
 	}
 	const [data, setdata] = useState([])
@@ -15,17 +18,41 @@ const Inputs = ({})=>{
 				"Authorization":'Basic MEZnazh0ZzlNSUhsb0RWMEtpYTE6WA=='
 			}}
 			)
-			setdata([...res.data])
+			setdata([...res.data])			
 		})()
 	},[])
+	
+	useEffect(() => {
+		const formInit = {}
+		data.forEach(field => {
+			if(field.type.split('_')[1] === 'checkbox')
+				formInit[field.name] = false
+			else
+				formInit[field.name] = ''
+			
+			if(field.nested_ticket_fields){
+				field.nested_ticket_fields.forEach(nested_field => {
+					formInit[nested_field.name] = ''
+				})
+			}
+		})
+		setFormData({...formInit})
+	}, [data])
+
+	const onChange = (e) => {
+		setFormData({...formData, [e.target.dataset.name]:e.target.value})
+	}
 
 	return(
 		<div className='container'>
-			<form onSubmit={submitHandler}>
-				{/* {data?.length && <DependableDropdown field={data[2]} />}
-				<Dropdown optionArray={data[8]?.choices} name={data[8]?.label}/> */}
+			{formData && <form onSubmit={submitHandler}>				
+				<Checkbox field={data[1]} changeHandler={onChange} value={formData[data[1]?.name]}/>
+				<Text field={data[5]} changeHandler={onChange} value={formData[data[5]?.name]}/>
+				{/* <Date field={data[3]} changeHandler={onChange} value={formData[data[3]?.name]}/> */}
+				{/* {data?.length && <DependableDropdown field={data[2]} />} */}
+				{/* <Dropdown optionArray={data[8]?.choices} name={data[8]?.label}/> */}
 				<input type='submit' value='Submit'/>
-			</form>
+			</form>}
 		</div>
 	) 
 }

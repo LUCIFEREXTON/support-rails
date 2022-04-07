@@ -1,9 +1,28 @@
-				<div className="form-check mb-3">
-					<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-					<label className="form-check-label" for="flexCheckDefault">
-						Default checkbox
-					</label>
-				</div>
+import React from 'react'
+import PropTypes from 'prop-types'
+
+function Checkbox({field, value, changeHandler}) {
+	const onChange = (e) => {
+		console.log('Checked?:', e.target.checked, 'Value?:', e.target.value)
+		e.target.value = e.target.checked
+		changeHandler(e)
+	}
+	return (
+		<div className="form-check mb-3">
+			<input data-name={field?.name} className="form-check-input" type="checkbox" onChange={onChange} value={value} id={`${field?.name}${field?.id}`}/>
+			<label className="form-check-label text-capitalize" htmlFor={`${field?.name}${field?.id}`}>
+				{field?.label}
+			</label>
+		</div>
+	)
+}
+
+Checkbox.propTypes = {}
+
+export default Checkbox
+
+
+
 //			{
 //					"id": 84000471175,
 //					"name": "cf_encrypted",
