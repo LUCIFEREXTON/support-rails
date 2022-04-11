@@ -1,8 +1,8 @@
 require 'httparty'
 require 'json'
 class Api::V1::TicketController < ApplicationController
-	
-	protect_from_forgery
+	skip_before_action :verify_authenticity_token
+	# protect_from_forgery
 	include HTTParty
   before_action :load_user_defaults
 	before_action :httparty_default_setting

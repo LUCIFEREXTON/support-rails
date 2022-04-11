@@ -5,6 +5,7 @@ import { BrowserRouter as Router} from "react-router-dom"
 import React, {useEffect, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import Inputs from './Components/Tickets/Inputs'
+import Create from './Screen/Create'
 
 function App(){
 	const [route, setRoute] = useState(false)
@@ -24,8 +25,9 @@ function App(){
 
   return (
 		route ? <Router basename={route}>
-			{/* <MainPage/> */}
-			<Inputs/>
+			{/* <Create/> */}
+			<MainPage/>
+			{/* <Inputs/> */}
 		</Router>: <></>
 	);
 }
