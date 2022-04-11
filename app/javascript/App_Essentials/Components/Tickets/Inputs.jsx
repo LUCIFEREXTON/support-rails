@@ -5,39 +5,64 @@ import DependableDropdown from './Inputs/DependableDropdown'
 import TextArea from './Inputs/TextArea'
 import Checkbox from './Inputs/Checkbox'
 import Text from './Inputs/Text'
+
 const Inputs = ({})=>{
+	const [formData, setFormData] = useState(false)
 	const submitHandler = (e)=>{
-		console.log(e.value)
 		e.preventDefault()
 	}
 	const [data, setdata] = useState([])
 	const renderElement = (field) => {
 		switch (field.type) {
 			case 'nested_dropdown':
-				return <DependableDropdown key={field.id} field={field} />
+				return <DependableDropdown key={field.id} field={field}/>
 			case 'select':
-				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.label}/>
+				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.label} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
 			case 'textarea':
-				return <TextArea key={field.id} name={field?.label} />
+				return <TextArea key={field.id} field={field} value={field[field.label_for_customers]} changeHandler={changeEditorState} required ={field.required_for_customers} />
 			case 'checkbox':
-				return <Checkbox key={field.id} name={field?.label} />
+				return <Checkbox key={field.id} field={field} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
 			default:
-				return <Text key={field.id} field={field} />
+				return <Text key={field.id} field={field} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
 		}
 	}
+	
 	useEffect(()=>{
 		(async()=>{
 			const res = await axios.get('/ticket/create')
 			setdata([...res.data])
 		})()
 	},[])
+	
+	useEffect(() => {
+		const formInit = {}
+		data.forEach(field => {
+			if(field.type === 'checkbox')
+				formInit[field.name] = false	
+			else
+				formInit[field.name] = ''
+			
+			if(field.nested_ticket_fields){
+				field.nested_ticket_fields.forEach(nested_field => {
+					formInit[nested_field.name] = ''
+				})
+			}
+		})
+		setFormData({...formInit})
+	}, [data])
+	const changeEditorState = (editorState, name) => {
+		setFormData({...formData, [name]: editorState})
+	}
+	const onChange = (e) => {
+		setFormData({...formData, [e.target.dataset.name]:e.target.value})
+	}
 
 	return(
 		<div className='container'>
-			<form onSubmit={submitHandler}>
+			{formData && data.length > 0 && <form onSubmit={submitHandler}>
 				{data.map(field => renderElement(field))}
 				<input type='submit' value='Submit'/>
-			</form>
+			</form>}
 		</div>
 	) 
 }

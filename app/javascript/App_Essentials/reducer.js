@@ -26,6 +26,12 @@ const ticket_open_status = [2, 3, 4]
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_PER_PAGE':{
+      return {
+        ...state,
+				ticket_per_page: action.per_page || 14
+      }
+    }
     case 'ERROR':{
       return {
         ...state,

@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react'
 import Dropdown from './Dropdown'
 import PropTypes from 'prop-types'
 
-function DependableDropdown({field}) {
+function DependableDropdown({field, ...rest}) {
   const no_of_dd = useRef(field.nested_ticket_fields.length+1)
   const [labels_arr, setLabel_arr] = useState([])
   const choices = useRef({...field.choices})
   const depth = useRef(1)
   const [optionsArr, setOptionsArr] = useState([])
   const [seletectedoptionArr, setSeletectedOptionArr] = useState([])
+  const [required, setRequired] = useState(false)
+  
   const onChange = (e) =>{
     depth.current = e.target.dataset.depth
     const value = e.target.value    
@@ -20,11 +22,12 @@ function DependableDropdown({field}) {
 
   useEffect(() => {
     const temp = [...labels_arr]
-    temp.push(field.label)
-    field.nested_ticket_fields.forEach(custom_field => temp.push(custom_field.label))
+    temp.push(field?.label_for_customers)
+    field?.nested_ticket_fields.forEach(custom_field => temp.push(custom_field?.label_in_portal))
     setLabel_arr([...temp])
-    setOptionsArr([[...Object.keys(field.choices)]])
-  },[])
+    setOptionsArr([[...Object.keys(field?.choices)]])
+    setRequired(field?.required_for_customers)
+  },[field])
 
   useEffect(() => {
     if(seletectedoptionArr.length && depth.current< no_of_dd.current){      
@@ -53,6 +56,8 @@ function DependableDropdown({field}) {
           name={labels_arr[i]} 
           value={seletectedoptionArr[i]}
           onChange={onChange}
+          required={required}
+          {...rest}
         />)}
       )}
     </>
@@ -61,13 +66,14 @@ function DependableDropdown({field}) {
 
 DependableDropdown.propTypes = {
   field: PropTypes.shape({
-    id: PropTypes.bigint,
+    id: PropTypes.number,
     name: PropTypes.string,
+    label: PropTypes.string,
     description: PropTypes.string,
     position: PropTypes.number,
     required_for_closure: PropTypes.bool,
     required_for_agents: PropTypes.bool,
-    type: PropTypes.oneOf(['text', 'textarea', 'checkbox', 'select', 'nested_dropdown', 'date', 'number', 'decimal']),
+    type: PropTypes.oneOf(['nested_dropdown']),
     default: PropTypes.bool,
     customers_can_edit: PropTypes.bool,
     label_for_customers: PropTypes.string,
@@ -75,15 +81,15 @@ DependableDropdown.propTypes = {
     displayed_to_customers: PropTypes.bool,
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
-    choices: PropTypes.objectOf(PropTypes.oneOfType(PropTypes.object, PropTypes.array)),
+    choices: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array])),
     nested_ticket_field: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.bigint,
+      id: PropTypes.number,
       name: PropTypes.string,
       description: PropTypes.string,
       label: PropTypes.string,
       label_in_portal: PropTypes.string,
       level: PropTypes.string,
-      ticket_field_id: PropTypes.bigint,
+      ticket_field_id: PropTypes.number,
       created_at: PropTypes.string,
       updated_at: PropTypes.string
     }))
