@@ -63,7 +63,7 @@ class Api::V1::TicketController < ApplicationController
 	verify_fields(params, @required_fields)
     contact_exists?
     body = required_field(params, [:attachments, :subject, :description, :custom_fields])
-    body[:email] = @@email
+    body[:email] = @email
     body[:priority] = 1
     body[:status] = 2
     #body[:custom_fields] = {
@@ -125,7 +125,7 @@ class Api::V1::TicketController < ApplicationController
 	end
 
 	def load_user_defaults
-		@@email = 'something@enmail.com' 
+		@email = 'utkarsh@gmail.com' 
 	end
 
 	def required_field(obj, labels_list)
@@ -138,7 +138,7 @@ class Api::V1::TicketController < ApplicationController
 		body
 	end
 
-	def verify_fields(obj, args)
+	def verify_fields(obj, labels)
 		missing_fields = []
 		labels.each do |label|
 			missing_fields << label unless obj.has_key?(label) || ( obj.has_key?(:custom_fields) && obj["custom_fields"].has_key?(label) )
@@ -146,7 +146,7 @@ class Api::V1::TicketController < ApplicationController
 		raise BlogVault::Error.new("You have not sent the following required fields: #{missing_fields.join(',')}") unless missing_fields.empty?
 	end
 
-	def validate_response(resp)
+	def validate_response(res)
 		if res.code != 200 && res.code != 201
 			res_body = JSON.parse(res.body)
 			res_body["errors"].each do |error|
@@ -160,7 +160,7 @@ class Api::V1::TicketController < ApplicationController
 
 	def catch_error(error)
 		puts error
-		render json: { message: error }, status: 400
+		render json: { message: 'Server Error' }, status: 400
 	end
 
 	def catch_custom_error(error)
@@ -267,10 +267,10 @@ class Api::V1::TicketController < ApplicationController
 		contact_res = JSON.parse(contact_res.body)
 		if contact_res.empty?
 		  body = Hash.new
-		  body[:email] = @@email
+		  body[:email] = @email
 		  @user_details = {
 			:gid => "12345", 
-			:name => @@email 
+			:name => @email 
 		  }
 		  body[:name] = @user_details[:name]
 		  body[:custom_fields] = @user_details.select { |key, value| key != :name }
