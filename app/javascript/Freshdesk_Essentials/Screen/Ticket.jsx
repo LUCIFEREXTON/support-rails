@@ -55,7 +55,7 @@ const Ticket = () => {
         }
       })
       .then(res => {
-        dispatch({type:'UPDATE_CONVERSATIONS', conversationList: [...conversationList, res.data]})
+				setConversationList([...conversationList, res.data])
         setopenreply(false)
         setEditorState(() => EditorState.createEmpty())
         changeFiles([])
