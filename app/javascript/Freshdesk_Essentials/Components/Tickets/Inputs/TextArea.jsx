@@ -11,26 +11,43 @@ function TextArea({field, changeHandler, value, required, ...rest}) {
 	const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 	useEffect(() => {
 		if(value!==draftToHtml(convertToRaw(editorState.getCurrentContent()))){
-			changeHandler(draftToHtml(convertToRaw(editorState.getCurrentContent())), field.name)
+			changeHandler(draftToHtml(convertToRaw(editorState.getCurrentContent())), field?.name)
 		}
-	}, [editorState])
+	}, [editorState, value, changeHandler])
 	return (
-		<div className="form-floating mb-3">
 			<Editor
 				data-name={field?.name}
-				className="form-control"
+				wrapperClassName= 'form-floating mb-3'
+				editorClassName="form-control"
+				editorStyle={{padding: '0.5rem', height: '300px', overflow: 'auto'}}
 				placeholder={`${field?.label_for_customers}`}
 				required={required}
 				editorState={editorState}
 				onEditorStateChange={setEditorState}
 				{...rest}
 			/>
-		</div>
-		// 	<textarea className="form-control" name={name} placeholder="Leave a comment here" id="floatingTextarea2" style={{height: '100px'}}></textarea>
 	)
 }
 
-TextArea.propTypes = {}
+TextArea.propTypes = {
+	field: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+		label: PropTypes.string,
+    description: PropTypes.string,
+    position: PropTypes.number,
+    required_for_closure: PropTypes.bool,
+    required_for_agents: PropTypes.bool,
+    type: PropTypes.oneOf(['textarea']),
+    default: PropTypes.bool,
+    customers_can_edit: PropTypes.bool,
+    label_for_customers: PropTypes.string,
+    required_for_customers: PropTypes.bool,
+    displayed_to_customers: PropTypes.bool,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
+  }).isRequired
+}
 
 export default TextArea
 

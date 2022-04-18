@@ -5,7 +5,7 @@ import { BrowserRouter as Router} from "react-router-dom"
 import React, {useEffect, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import Inputs from './Components/Tickets/Inputs'
-import Create from './Screen/Create'
+import Spinner from './Components/Spinner'
 
 function App(){
 	const [route, setRoute] = useState(false)
@@ -14,21 +14,20 @@ function App(){
 		(async ()=>{
 			try {
 				const res = await axios.get('/ticket/init_settings')
-				const {per_page, route} = res.data
-				dispatch({type: 'SET_PER_PAGE', per_page})
+				const {per_page, route, tickets_per_request} = res.data
+				dispatch({type: 'SET_PER_PAGE', per_page, tickets_per_request})
 				setRoute(route)
 			} catch (e) {
+				console.log(e)
 				dispatch({type:'ERROR', error: e.response.data.message})
 			}
 		})()
-	}, [])
-
+	}, [dispatch])
   return (
-		route ? <Router basename={route}>
-			{/* <Create/> */}
+		route ? 
+		<Router basename={route}>
 			<MainPage/>
-			{/* <Inputs/> */}
-		</Router>: <></>
+		</Router>: <Spinner/>
 	);
 }
 

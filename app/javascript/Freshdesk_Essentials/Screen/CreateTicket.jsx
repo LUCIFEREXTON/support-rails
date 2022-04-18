@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import React from 'react'
 import axios from "axios";
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -98,7 +97,7 @@ const CreateTicket = () =>{
         dispatch({type:'ERROR', error: error.response.data.message})
       }
 		})()
-	},[])
+	},[dispatch])
 
   return(
     <div

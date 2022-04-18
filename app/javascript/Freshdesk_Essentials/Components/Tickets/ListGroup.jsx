@@ -1,12 +1,13 @@
 import ListItem from './ListItem'
 import React from 'react'
+import Spinner from '../Spinner'
 import { useSelector }from 'react-redux'
 
 const ListGroup = ()=>{
-  const filterList = useSelector(state => state.filterList)
+  const filter_list = useSelector(state => state.filter_list)
   return (
     <ul className='list-group fa-padding'>
-      {filterList.map(ticket=>(
+      {filter_list ? filter_list.map(ticket=>(
         <ListItem 
           key={ticket.id} 
           id={ticket.id} 
@@ -16,7 +17,9 @@ const ListGroup = ()=>{
           createdAt={ticket.created_at} 
           updatedAt={ticket.updated_at}
         />
-      ))}
+      ))
+      :<Spinner />
+      }
     </ul>
   )
 }

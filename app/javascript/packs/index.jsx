@@ -4,18 +4,18 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import '../App_Essentials/index.css';
-import App from '../App_Essentials/App';
-import reportWebVitals from '../App_Essentials/reportWebVitals';
+import '../Freshdesk_Essentials/index.css';
+import App from '../Freshdesk_Essentials/App';
+import reportWebVitals from '../Freshdesk_Essentials/reportWebVitals';
 //bootstrap
-import '../App_Essentials/custom_bootstrap.scss'
+import '../Freshdesk_Essentials/custom_bootstrap.scss'
 import $ from 'jquery';
 import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 //redux
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from '../App_Essentials/reducer';
+import reducer from '../Freshdesk_Essentials/reducer';
 import axios from 'axios';
 import { composeWithDevTools } from "redux-devtools-extension";
 const token = document.querySelector('[name=csrf-token]').content;

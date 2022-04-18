@@ -11,8 +11,8 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 	rescue_from BlogVault::Error, :with => :catch_custom_error
 
 	def index
-		verify_fields(params, [:page_no, :per_page, :order_by])
-    all_tickets_res = self.class.get("/tickets?email=#{@email}&order_by=#{params[:order_by]}&per_page=100&page=#{params[:page_no]}")
+		verify_fields(params, [:page_no, :order_by])
+    all_tickets_res = self.class.get("/tickets?email=#{@email}&order_by=#{params[:order_by]}&per_page=15&page=#{params[:page_no]}")
     validate_response(all_tickets_res)
     all_tickets_res = JSON.parse(all_tickets_res.body)
     open_tickets = all_tickets_res.select { |ticket| [2,3].include?(ticket["status"]) }
@@ -28,7 +28,7 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
     body = {
       :per_page => 10,
       :route => '/ticket/faq',
-      :tickets_per_request => 100
+      :tickets_per_request => 15
     }
     render json: body, status: 200
   end
@@ -261,24 +261,24 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
     ticket_fields_res
   end
 	  def contact_exists?
-		contact_res = self.class.get("/contacts?email=#{@@email}")
-		validate_response(contact_res)
-		contact_res = JSON.parse(contact_res.body)
-		if contact_res.empty?
-		  body = Hash.new
-		  body[:email] = @email
-		  @user_details = {
-			:gid => "12345", 
-			:name => @email 
-		  }
-		  body[:name] = @user_details[:name]
-		  body[:custom_fields] = @user_details.select { |key, value| key != :name }
-		  new_contact_res = self.class.post("/contacts", {
-		:body => body.to_json(),
-		:headers => {"Content-Type" => 'application/json'} 
-		  })
-		  validate_response(new_contact_res)
-		end
+			contact_res = self.class.get("/contacts?email=#{@@email}")
+			validate_response(contact_res)
+			contact_res = JSON.parse(contact_res.body)
+			if contact_res.empty?
+				body = Hash.new
+				body[:email] = @email
+				@user_details = {
+				:gid => "12345", 
+				:name => @email 
+				}
+				body[:name] = @user_details[:name]
+				body[:custom_fields] = @user_details.select { |key, value| key != :name }
+				new_contact_res = self.class.post("/contacts", {
+			:body => body.to_json(),
+			:headers => {"Content-Type" => 'application/json'} 
+				})
+				validate_response(new_contact_res)
+			end
 	  end
 end
 #{"description":"Validation failed","errors":[{"field":"priorty","message":"Unexpected/invalid field in request","code":"invalid_field"}]}

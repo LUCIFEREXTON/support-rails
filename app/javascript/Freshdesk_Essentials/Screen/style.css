@@ -269,6 +269,13 @@ background:#eee;
 .support-content-comment {
 	padding: 10px 10px 10px 30px;
 	background: #eee;
+	display: flex;
+  flex-direction: column-reverse;
+	padding: 0px;
+	max-height: 80vh;
+	max-width: 50vw;
+	margin: auto;
+	overflow-y: scroll;
 }
 
 
@@ -366,22 +373,16 @@ background:#eee;
 }
 
 .ticket-header{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	/* display: flex; */
+	/* justify-content: space-between; */
+	/* align-items: center; */
 }
 
 .ticket-status{
 	margin-left: 10px;
 }
 
-.support-content-comment {
-	display: flex;
-  flex-direction: column-reverse;
-	padding: 0px;
-	max-height: 60vh;
-	overflow-y: scroll;
-}
+
 
 /* Conversation Box start */
 .conversation{
@@ -482,7 +483,7 @@ background:#eee;
 	margin: 0 15px 15px;
 }
 
-#viewTicketModal .modal-body{
+#viewTicket.modal-body{
 	margin: 0;
 	padding: 0;
 }
@@ -652,6 +653,7 @@ margin-left: 10px;
 
 .attachment-container {
 	display: flex !important;
+	flex-wrap: wrap;
 }
 
 .attachment-selected{
@@ -717,23 +719,23 @@ margin-left: 10px;
 }
 
 /*new ticket creation editor Style*/
-#newTicketModal .modal-dialog-centered > div{
+#newTicket.modal-dialog-centered > div{
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 }
 
-#newTicketModal .modal-body{
+#newTicket.modal-body{
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
 }
 
-#newTicketModal .modal-body.form-control:nth-of-type(3){
+#newTicket.modal-body.form-control:nth-of-type(3){
 	flex-grow: 1;
 }
 
-#newTicketModal .rdw-editor-wrapper > .rdw-editor-main{
+#newTicket.rdw-editor-wrapper > .rdw-editor-main{
 	height: 27vh;
 	max-height: 27vh !important;
 	overflow-y: auto;
@@ -741,7 +743,7 @@ margin-left: 10px;
 	padding: 5px;
 }
 
-#newTicketModal .rdw-editor-wrapper > .rdw-editor-main .DraftEditor-root{
+#newTicket.rdw-editor-wrapper > .rdw-editor-main .DraftEditor-root{
 	height: auto !important;
 	text-align: initial;
 }
@@ -774,7 +776,7 @@ margin-left: 10px;
 }
 /*View ticket*/
 
-#viewTicketModal .reply-modal{
+#viewTicket .reply-modal{
 	display: flex;
 	flex-direction: column;
 	background: white;
@@ -782,21 +784,21 @@ margin-left: 10px;
 	box-shadow: 2px 3px 12px 1px #00000094;
 }
 
-#viewTicketModal .reply-modal>.form-group{
+#viewTicket .reply-modal>.form-group{
 	border-radius: 20px;
 	overflow: hidden;
 	flex-grow: 1;
 }
 
-#viewTicketModal .rdw-editor-wrapper > .rdw-editor-main{
-	height: 27vh;
-	max-height: 27vh !important;
+#viewTicket .rdw-editor-wrapper > .rdw-editor-main{
+	height: 65vh;
+	max-height: 65vh !important;
 	overflow-y: auto;
 	border: 0.5px solid rgba(143, 142, 142, 0.253);
 	padding: 5px;
 }
 
-#viewTicketModal .rdw-editor-wrapper > .rdw-editor-main .DraftEditor-root{
+#viewTicket .rdw-editor-wrapper > .rdw-editor-main .DraftEditor-root{
 	height: auto !important;
 	text-align: initial;
 }

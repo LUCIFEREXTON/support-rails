@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-const Dropdown = ({optionArray=[], name, depth=1, value, changeHandler, required, ...rest})=>{
+const Dropdown = ({optionArray=[], name, label, depth=1, value, changeHandler, required, ...rest})=>{
 	const select = useRef(null)
 
 	useEffect(() => {
@@ -10,14 +10,14 @@ const Dropdown = ({optionArray=[], name, depth=1, value, changeHandler, required
 
 	return (
 		<div className="form-floating mb-3">
-			<select ref={select} defaultValue={'DEFAULT'} data-depth={depth} value={value} onChange={changeHandler} className="form-select" id={name} required={required} {...rest}>
-				<option value="DEFAULT" disabled >Choose {name}</option>
+			<select ref={select} defaultValue={'DEFAULT'} data-name={name} data-depth={depth} value={value} onChange={changeHandler} className="form-select" id={label} required={required} {...rest}>
+				<option value="DEFAULT" disabled >Choose {label}</option>
 				{(Array.isArray( optionArray ) && optionArray?.length > 0)
 					? optionArray?.map((option,i) => <option key={i} value={option}>{option}</option>)
 					: Object.keys(optionArray).map(( key, i)=> <option key={i} value={optionArray[key]}>{key}</option>)
 				}
 			</select>
-			<label className="text-capitalize" htmlFor={name}>{name}</label>
+			<label className="text-capitalize" htmlFor={label}>{label}</label>
 		</div>
 	)
 }
@@ -27,7 +27,7 @@ Dropdown.propTypes = {
 		PropTypes.object,
 		PropTypes.arrayOf(PropTypes.string)
 	]),
-	name : PropTypes.string.isRequired,
+	label : PropTypes.string.isRequired,
 	depth: PropTypes.number,
 	value: PropTypes.oneOfType([
 		PropTypes.string,
@@ -40,7 +40,7 @@ export default Dropdown
 
 //			{
 //					"id": 84000463083,
-//					"name": "ticket_type",
+//					"label": "ticket_type",
 //					"label": "Type",
 //					"description": "Ticket type",
 //					"position": 9,

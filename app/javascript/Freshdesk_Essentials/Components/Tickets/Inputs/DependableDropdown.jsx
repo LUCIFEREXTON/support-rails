@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import Dropdown from './Dropdown'
 import PropTypes from 'prop-types'
 
-function DependableDropdown({field, ...rest}) {
+function DependableDropdown({field, changeHandler, ...rest}) {
   const no_of_dd = useRef(field.nested_ticket_fields.length+1)
   const [labels_arr, setLabel_arr] = useState([])
+  const [names_arr, setName_arr] = useState([])
   const choices = useRef({...field.choices})
   const depth = useRef(1)
   const [optionsArr, setOptionsArr] = useState([])
@@ -21,10 +22,16 @@ function DependableDropdown({field, ...rest}) {
   }
 
   useEffect(() => {
-    const temp = [...labels_arr]
+    const temp = []
+    const nameTemp = []
     temp.push(field?.label_for_customers)
-    field?.nested_ticket_fields.forEach(custom_field => temp.push(custom_field?.label_in_portal))
+    nameTemp.push(field?.name)
+    field?.nested_ticket_fields.forEach(custom_field =>{ 
+      temp.push(custom_field?.label_in_portal)
+      nameTemp.push(custom_field?.name)
+    })
     setLabel_arr([...temp])
+    setName_arr([...nameTemp])
     setOptionsArr([[...Object.keys(field?.choices)]])
     setRequired(field?.required_for_customers)
   },[field])
@@ -44,6 +51,8 @@ function DependableDropdown({field, ...rest}) {
       depth.current++;
       setOptionsArr([...tempOpArr])
     }
+    console.log(seletectedoptionArr)
+    changeHandler(names_arr, seletectedoptionArr)
   }, [seletectedoptionArr])
 
   return (
@@ -53,9 +62,10 @@ function DependableDropdown({field, ...rest}) {
           key={i}
           depth={i+1}
           optionArray={options} 
-          name={labels_arr[i]} 
+          label={labels_arr[i]} 
+          name={names_arr[i]} 
           value={seletectedoptionArr[i]}
-          onChange={onChange}
+          changeHandler={onChange}
           required={required}
           {...rest}
         />)}

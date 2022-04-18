@@ -1,0 +1,28 @@
+$blue:    #182d4f !default;
+$green:   #249182 !default;
+.active{
+	box-shadow: inset 0px 0px 7px 1px #00000061;
+}
+$position-values: (
+  0: 0,
+	1: 1%,
+  50: 50%,
+  100: 100%
+);
+
+$border-widths: (
+  1: 1px,
+  2: 2px,
+  3: 3px,
+  4: 4px,
+  5: 5px,
+  10: 10px
+);
+
+.create-ticket .DraftEditor-editorContainer,.create-ticket .DraftEditor-root,.create-ticket .public-DraftEditor-content{
+  height: unset;
+}
+.create-ticket .public-DraftStyleDefault-block{
+  margin: 0px !important;
+}
+@import '~bootstrap/scss/bootstrap.scss';

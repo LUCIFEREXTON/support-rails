@@ -9,6 +9,7 @@ import Ticket from './Ticket';
 // import Faq from './Faq';
 
 import Modal from '../Components/Modal'
+import Create from './Create';
 
 const MainPage = () =>{
 		return(
@@ -35,11 +36,12 @@ const MainPage = () =>{
 			<Route
 				path='/new'
 				element={
-					<CreateTicket />
+					<Create/>
+					// <CreateTicket />
 				}
 			/>
 			<Route
-				path='/view'
+				path='/view/:user_id/:id'
 				element={
 					<Ticket />
 				}

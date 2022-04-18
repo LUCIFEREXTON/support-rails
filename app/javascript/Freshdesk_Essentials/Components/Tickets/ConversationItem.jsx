@@ -4,17 +4,16 @@ import parse from 'html-react-parser';
 import Attachment from './Attachment'
 import { useSelector } from 'react-redux'
 const ConversationItem = ({source, conversation}) => {
-	const name = useSelector( state => state.user.name)
   return(
     <div className={`conversation ${source?'user':'support'}`}>
 			<div className="conv-header">
 				<div className="iconbg">
 					<div className="icon">
-						{source?name[0]:'BV'}
+						{source?'You':'BV'}
 					</div>
 				</div>
 				<div className="sender">
-					<div className="responder">{source?name:'Support'}</div>
+					<div className="responder">{source?'You':'Support'}</div>
 					{conversation?.updated_at
 					?<div className="date">Raised On: {formatDate(conversation?.created_at)} | Last Activity: {formatDate(conversation?.updated_at)}</div>
 					:<div className="date">{formatDate(conversation?.created_at)}</div>}

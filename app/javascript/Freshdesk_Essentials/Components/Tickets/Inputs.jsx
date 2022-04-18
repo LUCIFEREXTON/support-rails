@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState, useCallback, useRef} from 'react'
 import axios from 'axios'
 import Dropdown from './Inputs/Dropdown'
 import DependableDropdown from './Inputs/DependableDropdown'
@@ -7,17 +7,29 @@ import Checkbox from './Inputs/Checkbox'
 import Text from './Inputs/Text'
 
 const Inputs = ({})=>{
-	const [formData, setFormData] = useState(false)
+	//handling file inputs
+	const [files, changeFiles] = useState([]);
+	const fileUploadRef = useRef();
+	const formRef = useRef();
+
+	const onFilesChange = event => {
+    changeFiles([...files, ...event.target.files]);
+    formRef.current.reset();
+  }
+	const removeSelectedFile = (fileName) => {
+    changeFiles([...files.filter(file => file.name !== fileName)]);
+  }
 	const submitHandler = (e)=>{
-		e.preventDefault()
+		console.log(formData);
+		e.preventDefault();
 	}
-	const [data, setdata] = useState([])
+	//rendring diffrent input fields acc to ticket fields
 	const renderElement = (field) => {
 		switch (field.type) {
 			case 'nested_dropdown':
-				return <DependableDropdown key={field.id} field={field}/>
+				return <DependableDropdown key={field.id} field={field} changeHandler={dependentChange}/>
 			case 'select':
-				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.label} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
+				return <Dropdown key={field.id} optionArray={field?.choices} name={field?.name} label={field?.label_for_customers} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
 			case 'textarea':
 				return <TextArea key={field.id} field={field} value={field[field.label_for_customers]} changeHandler={changeEditorState} required ={field.required_for_customers} />
 			case 'checkbox':
@@ -26,19 +38,23 @@ const Inputs = ({})=>{
 				return <Text key={field.id} field={field} value={field[field.label_for_customers]} changeHandler={onChange} required ={field.required_for_customers} />
 		}
 	}
-	
+	//setting ticket fields
+	const [data, setdata] = useState([])
 	useEffect(()=>{
 		(async()=>{
 			const res = await axios.get('/ticket/create')
 			setdata([...res.data])
 		})()
 	},[])
-	
+	const [formData, setFormData] = useState(false)
+	//setting default formValues
 	useEffect(() => {
 		const formInit = {}
 		data.forEach(field => {
 			if(field.type === 'checkbox')
-				formInit[field.name] = false	
+				formInit[field.name] = false
+			else if(field.type === 'textarea')
+				formInit[field.name] = '<p></p>\n'
 			else
 				formInit[field.name] = ''
 			
@@ -50,20 +66,61 @@ const Inputs = ({})=>{
 		})
 		setFormData({...formInit})
 	}, [data])
-	const changeEditorState = (editorState, name) => {
-		setFormData({...formData, [name]: editorState})
-	}
+	//onchnage events for handling form
+	const changeEditorState = useCallback((editorState, name) => {
+		console.log(formData)
+		console.log(name, editorState)
+		if(editorState!==formData[name]){
+			setFormData({...formData, [name]: editorState})
+		}
+	},[formData])
 	const onChange = (e) => {
-		setFormData({...formData, [e.target.dataset.name]:e.target.value})
+		if(e.target.value && e.target.value!==formData[e.target.dataset.name]){
+			console.log(e.target.dataset.name, e.target.value);
+			setFormData({...formData, [e.target.dataset.name]:e.target.value})
+		}
 	}
-
+	const dependentChange = (namesArr, valueArr) => {
+		let temp = {...formData}
+		namesArr.forEach((name, i)=> {
+			console.log(name, valueArr[i])
+			temp = {...temp, [name]: valueArr[i]}
+		})
+		setFormData({...temp})
+	}
+	
 	return(
-		<div className='container'>
+		<>
 			{formData && data.length > 0 && <form onSubmit={submitHandler}>
 				{data.map(field => renderElement(field))}
-				<input type='submit' value='Submit'/>
+				<form ref={formRef}>
+          <div className="mb-3 form-group">
+            {
+              files?.length  !== 0 && <div name="attachements" className="form-control attachment-container">
+                {
+                  files.map((file, ind) => (
+                    <div className="attachment-selected" key={ind}>
+                      <>{file.name}</>
+                      <button type="button" className="file-remove-btn" onClick={() => removeSelectedFile(`${file.name}`)}>x</button>
+                    </div>
+                  ))
+                }
+              </div>
+            }
+            <button type="button" className="btn btn-primary" onClick={(event) => fileUploadRef.current.click()}>Upload Attachments</button>
+            <input 
+              type="file"
+              ref={fileUploadRef}  
+              multiple
+              onChange={onFilesChange}
+              style={{"display": "none"}} 
+            />
+          </div>
+        </form>
+				<input type="submit" className="btn btn-success text-white me-2" value="Submit" />
+				<input type="reset" className="btn btn-danger ms-2" value="Reset"/>
 			</form>}
-		</div>
+		</>
 	) 
 }
 

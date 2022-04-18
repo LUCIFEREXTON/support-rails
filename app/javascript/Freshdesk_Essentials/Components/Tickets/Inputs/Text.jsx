@@ -22,22 +22,22 @@ function Text({field, changeHandler, value, required, ...rest}) {
 				break
 			}
 			case 'date':{
-				setPattern('\\d{1,2}\/\\d{1,2}\/\\d{4}')
+				setPattern('\\d{1,2}/\\d{1,2}/\\d{4}')
 				setFormText('Only dd/mm/yyyy are allowed')
+				break
+			}
+			default: {
+				break
 			}
 		}
 	},[field])
-
-	const onChange = (e) => {
-		// if(field)
-		changeHandler(e)
-	}
 
 	return (
 		<div className="form-floating mb-3">
 			<input
 				data-name={field?.name}
 				value={value}
+				onKeyPress={changeHandler}
 				onChange={changeHandler}
 				type={field.input_type}
 				id={`${field?.name}${field?.id}`}

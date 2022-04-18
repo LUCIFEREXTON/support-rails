@@ -2,6 +2,7 @@ import axios from "axios";
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate } from 'react-router-dom'
 import ConversationGroup from "../Components/Tickets/ConversationGroup";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Editor } from "react-draft-wysiwyg";
@@ -10,39 +11,32 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
 
 const Ticket = () => {
+  const navigate = useNavigate()
   const [openreply, setopenreply] = useState(false)
   const [ticket, setticket] = useState({})
-  const reduxticket = useSelector( state => state.ticket)
-  const { id } = reduxticket
+  const [conversationList, setConversationList] = useState([])
+  const { user_id, id } = useParams()
   const [files, changeFiles] = useState([]);
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
   const formRef = useRef();
   const fileUploadRef = useRef();
-  let conversationList = useSelector(state => state.conversationList);
   const dispatch = useDispatch()
   let statusValue = ''
   let statusChangeButton = ''
+  
   if( ticket?.status === 5 ){
-    statusValue =  <span className="badge bg-red ticket-status">Status Closed</span> 
+    statusValue =  <span className="badge bg-red align-self-center">Status Closed</span> 
+    statusChangeButton =  <div className="btn bg-secondry-bv text-light" onClick={() => statusChangeHandler(2)}><strong>Reopen Ticket</strong></div>
   }else{
-    statusValue =  <span className="badge bg-green ticket-status">Status Open</span>
-  }          
-  if( ticket?.status === 5 ){
-    statusChangeButton =  <button type="button" className="btn bg-secondry-bv text-light pull-right" onClick={() => statusChangeHandler(2)}><strong>Reopen Ticket</strong></button>
-  }else{
-    statusChangeButton =  <button type="button" className="btn bg-secondry-bv text-light pull-right" onClick={() => statusChangeHandler(5)}><strong>Ticket Resolve</strong></button>
+    statusValue =  <span className="badge bg-green align-self-center">Status Open</span>
+    statusChangeButton =  <div className="btn bg-secondry-bv text-light" onClick={() => statusChangeHandler(5)}><strong>Ticket Resolve</strong></div>
   }
 
   const statusChangeHandler = async(status) => {
     try{
-			axios.put(`/ticket/update/${id}`, { status })
-      .then(res => {
-        setticket({...res.data})
-        dispatch({type:'UPDATE_STATUS', ticket: {...res.data}})
-      })
-      .catch(error=>{
-        dispatch({type:'ERROR', error: error.response.data.message})
-      })
+			const res = await axios.put(`/ticket/update/${id}`, { status })
+      setticket({...res.data})
+      dispatch({type:'UPDATE_STATUS', ticket: {...res.data}})
     }catch(error){
       dispatch({type:'ERROR', error: error.response.data.message})
     }
@@ -83,19 +77,32 @@ const Ticket = () => {
   }
   
   useEffect(() =>{
-    setticket({...reduxticket})
-  }, [reduxticket])
+    (
+      async () => {
+        try {
+          const res = await axios.post(`/ticket/read`,{ user_id, id})
+          const { conversationList, ...ticket} = res.data
+          setticket({...ticket})
+          setConversationList([...conversationList])
+        } catch (error) {
+          dispatch({type:'ERROR', error: error.response.data.message})
+        }
+      }
+    )()
+  }, [])
 
   return(
-    <div className="modal-dialog modal-dialog-centered">
+    <div id='viewTicket'>
       <div className="modal-header bg-primary-bv text-light">
-        <div className="ticket-header">
-        <h4 className="modal-title"><i className="fa fa-cog"></i> {ticket?.subject} [#{ticket?.id}] {statusValue}</h4>
-        <div className="buttons">
-          <div className="nav-links pull-right">
-            {statusChangeButton}
-          </div>
+      <i onClick={()=>navigate(-1)} className="display-5 rounded-circle lh-1 bi bi-arrow-left-circle bg-success text-primary"></i>
+        <div className="d-flex">
+          <h4 className="modal-title me-2">{ticket?.subject} [#{ticket?.id}]</h4>
+          {statusValue}
         </div>
+        <div>
+          {(ticket?.status === 5)
+          ?<div className="btn bg-secondry-bv text-light" onClick={() => statusChangeHandler(2)}><strong>Reopen Ticket</strong></div>
+          :<div className="btn bg-secondry-bv text-light" onClick={() => statusChangeHandler(5)}><strong>Ticket Resolve</strong></div>}
         </div>
       </div>
       <div className='modal-body'>
