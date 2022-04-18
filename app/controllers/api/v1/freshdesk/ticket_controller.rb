@@ -8,20 +8,15 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 	before_action :httparty_default_setting
 	before_action :request_puts
 	rescue_from StandardError, :with => :catch_error
-	rescue_from BlogVault::Error, :with => :catch_custom_error
 
 	def index
-		verify_fields(params, [:page_no, :order_by])
-    all_tickets_res = self.class.get("/tickets?email=#{@email}&order_by=#{params[:order_by]}&per_page=15&page=#{params[:page_no]}")
+		verfiy_params(params, [:page_no, :order_by])
+    all_tickets_res = self.class.get("/tickets?email=#{@email}&order_by=#{params[:order_by]}&per_page=100&page=#{params[:page_no]}")
     validate_response(all_tickets_res)
     all_tickets_res = JSON.parse(all_tickets_res.body)
     open_tickets = all_tickets_res.select { |ticket| [2,3].include?(ticket["status"]) }
     close_tickets = all_tickets_res.select { |ticket| [4,5].include?(ticket["status"]) }
-    all_tickets_res_body = {
-      :open => open_tickets,
-      :close => close_tickets
-    }
-    render json: all_tickets_res_body, status: 200
+    render json: { :open => open_tickets, :close => close_tickets }, status: 200
   end
 
   def init_settings
@@ -35,13 +30,13 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 
 
   def read
-		verify_fields(params, [:id, :user_id])
+		verfiy_params(params, [:id, :user_id])
 
 		ticket_res = self.class.get("/tickets/#{params[:id]}")
 		validate_response(ticket_res)
 		ticket_res = JSON.parse(ticket_res.body)
 		
-		raise BlogVault::Error.new('Ticket Not Exist') if(ticket_res[:user_id] == params[:user_id])
+		raise BlogVault::NotFoundError.new('Ticket') if (ticket_res["requester_id"] != params[:user_id])
 		
 		conversation_res = self.class.get("/tickets/#{params[:id]}/conversations")
 		validate_response(conversation_res)
@@ -60,7 +55,7 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 
   def create
     required_fields = get_required_fields(fetch_ticket_fields)
-    verify_fields(params, required_fields)
+    verfiy_params(params, required_fields)
     contact_exists?
     body = required_field(params, [:attachments, :subject, :description, :custom_fields])
     body[:email] = @email
@@ -78,14 +73,14 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
   end
 
   def update
-		verify_fields(params, [:id, :status])
+		verfiy_params(params, [:id, :status])
 		res = self.class.put("/tickets/#{params[:id]}",{:body => { status: params[:status]}.to_json(),:headers => {"Content-Type" => "application/json"}})
 		validate_response(res)
 		render json: res.body, status: res.code
   end
 
   def reply
-		verify_fields(params, [:agent_id, :body, :id, :user_id])
+		verfiy_params(params, [:agent_id, :body, :id, :user_id])
 		body = required_field(params, [:body, :user_id, :attachments])
 		body[:private] = false
 		if params[:agent_id] != "null"
@@ -110,10 +105,7 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 			"https://amazon.com",
 			"https://blogvault.net"
 		]
-		body = {
-			:blog_uri_list => blog_uri
-		}
-		render json: body, status: 200
+		render json: { :blog_uri_list => blog_uri }, status: 200
 	end
 
 	private
@@ -138,34 +130,32 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 		body
 	end
 
-	def verify_fields(obj, labels)
+	def verify_params(obj, labels)
 		missing_fields = []
 		labels.each do |label|
-			missing_fields << label unless obj.has_key?(label) || ( obj.has_key?(:custom_fields) && obj["custom_fields"].has_key?(label) )
+		  missing_fields << label if !( obj[label].present? || ( obj.has_key?(:custom_fields) && obj["custom_fields"][label].present? ) )
 		end
-		raise BlogVault::Error.new("You have not sent the following required fields: #{missing_fields.join(',')}") unless missing_fields.empty?
+		raise BlogVault::MissingParamsError.new(missing_fields) if missing_fields.present?
 	end
+	
 
 	def validate_response(res)
 		if res.code != 200 && res.code != 201
-			res_body = JSON.parse(res.body)
-			res_body["errors"].each do |error|
-				if error["message"] == 'There is no contact matching the given email'
-					raise BlogVault::Error.new("You have no Tickets!!!")
-				end
+		  res_body = JSON.parse(res.body)
+		  res_body["errors"].each do |error|
+			if error["message"] == 'There is no contact matching the given email'
+			  raise BlogVault::NotFoundError.new("Tickets")
 			end
-			raise BlogVault::Error.new("Server Issue, Please Try Again...")
-		end	  
+		  end
+		  raise BlogVault::ServerError
+		end
 	end
+	
 
 	def catch_error(error)
 		puts error
-		render json: { message: 'Server Error' }, status: 400
-	end
-
-	def catch_custom_error(error)
-		puts error
-		render json: { message: error }, status: 400
+		error_message = error.class.to_s.include?("BlogVault::") ? error.message : "Server Error"
+    	render json: { message: error_message }, status: 400
 	end
 
 	def request_puts
