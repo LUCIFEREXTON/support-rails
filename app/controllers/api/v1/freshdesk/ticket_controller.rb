@@ -10,7 +10,7 @@ class Api::V1::Freshdesk::TicketController < ApplicationController
 	rescue_from StandardError, :with => :catch_error
 
 	def index
-		verfiy_params(params, [:page_no, :order_by])
+		verify_params(params, [:page_no, :order_by])
     all_tickets_res = self.class.get("/tickets?email=#{@email}&order_by=#{params[:order_by]}&per_page=100&page=#{params[:page_no]}")
     validate_response(all_tickets_res)
     all_tickets_res = JSON.parse(all_tickets_res.body)

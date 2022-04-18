@@ -19,7 +19,7 @@ import reducer from '../Freshdesk_Essentials/reducer';
 import axios from 'axios';
 import { composeWithDevTools } from "redux-devtools-extension";
 const token = document.querySelector('[name=csrf-token]').content;
-axios.defaults.baseURL = "http://localhost:3000/api/v1";
+axios.defaults.baseURL = "http://localhost:3000/api/v1/freshdesk";
 axios.defaults.headers.common['X-CSRF-TOKEN'] = token
 const store = createStore(reducer, composeWithDevTools());
 
